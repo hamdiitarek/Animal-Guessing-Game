@@ -1,0 +1,2 @@
+Is it a mammal?,Elephant,Hummingbird
+Can it fly?,Dolphin,Bear
