@@ -2,53 +2,86 @@
 #define Load_animals_and_questions_h
 
 void load_animals_and_questions(node_t **root_node) {
-    // Open the file in read mode
-    FILE *fp = fopen("C:\\Users\\Hamdi\\CLionProjects\\final project\\Animals.txt", "r");
+    // Try to open the file in read mode - use relative path
+    FILE *fp = fopen("Animals.txt", "r");
     if (fp == NULL) {
-        // The file does not exist, return without doing anything
+        // If file doesn't exist, create a simple initial tree
+        (*root_node)->question = malloc(strlen("Is it a mammal?") + 1);
+        strcpy((*root_node)->question, "Is it a mammal?");
+        
+        // Create leaf nodes for initial animals
+        node_t *mammal_node = malloc(sizeof(node_t));
+        mammal_node->question = malloc(strlen("Dog") + 1);
+        strcpy(mammal_node->question, "Dog");
+        mammal_node->yes = NULL;
+        mammal_node->no = NULL;
+        mammal_node->yes_answer = NULL;
+        mammal_node->no_answer = NULL;
+        
+        node_t *non_mammal_node = malloc(sizeof(node_t));
+        non_mammal_node->question = malloc(strlen("Fish") + 1);
+        strcpy(non_mammal_node->question, "Fish");
+        non_mammal_node->yes = NULL;
+        non_mammal_node->no = NULL;
+        non_mammal_node->yes_answer = NULL;
+        non_mammal_node->no_answer = NULL;
+        
+        (*root_node)->yes = mammal_node;
+        (*root_node)->no = non_mammal_node;
+        (*root_node)->yes_answer = NULL;
+        (*root_node)->no_answer = NULL;
+        
         return;
     }
 
-    // Read the first line from the file, which is the initial question and answers
-    char line[100];
-    if (fgets(line, 100, fp) != NULL) {
-        // Parse the question, yes answer, and no answer from the line
-        char *question = strtok(line, ",");
-        char *yes_answer = strtok(NULL, ",");
-        char *no_answer = strtok(NULL, ",");
-        // Update the root node with the initial question and answers
-        (*root_node)->question = malloc(strlen(question) + 1);
-        (*root_node)->yes_answer = malloc(strlen(yes_answer) + 1);
-        (*root_node)->no_answer = malloc(strlen(no_answer) + 1);
-        strcpy((*root_node)->question, question);
-        strcpy((*root_node)->yes_answer, yes_answer);
-        strcpy((*root_node)->no_answer, no_answer);
+    // Read and parse the file (simplified format for now)
+    char line[200];
+    if (fgets(line, sizeof(line), fp) != NULL) {
+        // Remove newline character
+        line[strcspn(line, "\n")] = 0;
+        
+        // For simplicity, just set the root question
+        (*root_node)->question = malloc(strlen(line) + 1);
+        strcpy((*root_node)->question, line);
+        (*root_node)->yes_answer = NULL;
+        (*root_node)->no_answer = NULL;
+        
+        // Create simple leaf nodes if file has more data
+        node_t *yes_node = malloc(sizeof(node_t));
+        node_t *no_node = malloc(sizeof(node_t));
+        
+        if (fgets(line, sizeof(line), fp) != NULL) {
+            line[strcspn(line, "\n")] = 0;
+            yes_node->question = malloc(strlen(line) + 1);
+            strcpy(yes_node->question, line);
+        } else {
+            yes_node->question = malloc(strlen("Dog") + 1);
+            strcpy(yes_node->question, "Dog");
+        }
+        
+        if (fgets(line, sizeof(line), fp) != NULL) {
+            line[strcspn(line, "\n")] = 0;
+            no_node->question = malloc(strlen(line) + 1);
+            strcpy(no_node->question, line);
+        } else {
+            no_node->question = malloc(strlen("Fish") + 1);
+            strcpy(no_node->question, "Fish");
+        }
+        
+        yes_node->yes = NULL;
+        yes_node->no = NULL;
+        yes_node->yes_answer = NULL;
+        yes_node->no_answer = NULL;
+        
+        no_node->yes = NULL;
+        no_node->no = NULL;
+        no_node->yes_answer = NULL;
+        no_node->no_answer = NULL;
+        
+        (*root_node)->yes = yes_node;
+        (*root_node)->no = no_node;
     }
 
-    // Read the rest of the lines from the file, which contain the animals and questions
-    node_t *current_node = *root_node;
-    while (fgets(line, 100, fp) != NULL) {
-        // Parse the question, yes answer, and no answer from the line
-        char *question = strtok(line, ",");
-        char *yes_answer = strtok(NULL, ",");
-        char *no_answer = strtok(NULL, ",");
-        // Create a new node with the animal and question
-        node_t *new_node = malloc(sizeof(node_t));
-        new_node->question = malloc(strlen(question) + 1);
-        new_node->yes_answer = malloc(strlen(yes_answer) + 1);
-        new_node->no_answer = malloc(strlen(no_answer) + 1);
-        strcpy(new_node->question, question);
-        strcpy(new_node->yes_answer, yes_answer);
-        strcpy(new_node->no_answer, no_answer);
-        new_node->yes = NULL;
-        new_node->no = NULL;
-        // Insert the new node into the linked list
-        current_node->yes = new_node;
-        current_node->no = new_node;
-        current_node = new_node;
-    }
-
-    // Close the file
     fclose(fp);
 }
 

@@ -1,20 +1,28 @@
 #ifndef Update_animals_and_questions_h
 #define Update_animals_and_questions_h
 
+void save_tree(FILE *fp, node_t *node) {
+    if (node == NULL) return;
+    
+    // Save current node
+    fprintf(fp, "%s\n", node->question);
+    
+    // Recursively save children
+    save_tree(fp, node->yes);
+    save_tree(fp, node->no);
+}
+
 void update_animals_and_questions(node_t *root_node) {
-    // Open the file in append mode
-    FILE *fp = fopen("C:\\Users\\Hamdi\\CLionProjects\\final project\\Animals.txt", "a");
+    // Open the file in write mode to overwrite
+    FILE *fp = fopen("Animals.txt", "w");
     if (fp == NULL) {
-        printf("Error opening file!\n");
+        printf("Error opening file for writing!\n");
         return;
     }
 
-    // Traverse through the linked list and write each node to the file
-    while (root_node != NULL) {
-        fprintf(fp, "%s,%s,%s\n", root_node->question, root_node->yes_answer, root_node->no_answer);
-        root_node = root_node->no;
-    }
-
+    // Save the entire tree structure
+    save_tree(fp, root_node);
+    
     fclose(fp);
 }
 

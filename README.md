@@ -1,73 +1,63 @@
 
-
 # Animal Guessing Game
 
-The Animal Guessing Game is a console-based game where the computer tries to guess an animal the player is thinking of by asking a series of yes or no questions. If the computer cannot guess the animal, it prompts the player to enter information about the new animal and uses this information to improve its guessing abilities in future games.
-
-## Table of Contents
-- [Installation](#installation)
-- [How to Play](#how-to-play)
-- [Game Flow](#game-flow)
-- [Updating the Animals File](#updating-the-animals-file)
-- [Contributing](#contributing)
-- [License](#license)
-
-## Installation
-
-To play the Animal Guessing Game, you will need to install the following:
-- A C compiler (such as GCC or Clang)
-- A console or terminal emulator
-
-To install the Animal Guessing Game:
-1. Clone this repository or download the source code as a ZIP file.
-2. Compile the code using your preferred C compiler.
-   - For example, if you are using GCC, run the following command in your terminal:
-   ```
-   gcc -o animal-guessing-game main.c structs.h game.h learn_new_information.h play_game.h start_game.h update_animals_and_questions.h
-   ```
-3. Run the compiled executable file (animal-guessing-game on Unix-like systems or animal-guessing-game.exe on Windows) in your console or terminal emulator.
+A simple console-based animal guessing game written in C that learns from the player.
 
 ## How to Play
 
-1. Start the game by running the executable file.
-2. Think of an animal and press enter to continue.
-3. The computer will ask a series of yes or no questions to try to guess the animal.
-4. If the computer correctly guesses the animal, it will prompt the player to play again or quit.
-5. If the computer cannot guess the animal, it will prompt the player to enter information about the new animal.
-6. After the player enters the information, the computer will update its database and prompt the player to play again or quit.
+1. **Compile the game:**
+   ```bash
+   gcc -o animal_game main.c
+   ```
 
-## Game Flow
+2. **Run the game:**
+   ```bash
+   ./animal_game
+   ```
 
-The game flow is controlled by the following functions:
+3. **Game Flow:**
+   - Start the game by running the executable file
+   - Think of an animal and press Enter to continue
+   - The computer will ask a series of yes or no questions to try to guess the animal
+   - If the computer correctly guesses the animal, it will prompt you to play again or quit
+   - If the computer cannot guess the animal, it will prompt you to enter information about the new animal
+   - After you enter the information, the computer will update its database and prompt you to play again or quit
 
-- `start_game`: This function initiates the game by calling the `play_game` function.
+## Features
 
-- `play_game`: This function asks the player yes or no questions to try to guess the animal. If the computer correctly guesses the animal, it will prompt the player to play again or quit. If the computer cannot guess the animal, it will prompt the player to enter information about the new animal.
+- **Learning System:** The game learns from incorrect guesses and builds a decision tree
+- **Persistent Memory:** Animal data is saved to `Animals.txt` file
+- **Interactive:** Simple yes/no question format
+- **Replay Option:** Can play multiple rounds
 
-- `learn_new_information`: This function prompts the player to enter information about the new animal and updates the linked list with the new information.
+## File Structure
 
-- `update_animals_and_questions`: This function writes the linked list to the Animals.txt file.
+- `main.c` - Main program entry point
+- `Structs.h` - Data structure definitions
+- `Play game.h` - Core game logic
+- `Learn new information.h` - Learning system implementation
+- `Load animals and questions.h` - File loading functionality
+- `Update animals and questions.h` - File saving functionality
+- `Start Game.h` - Game initialization
+- `Animals.txt` - Database of animals and questions
 
-## Updating the Animals File
+## Example Session
 
-The Animals.txt file contains the animals and questions used by the game. To update the file, follow these steps:
+```
+Welcome to the Animal Guessing Game!
+Think of an animal and press Enter to continue...
 
-1. Open the Animals.txt file in a text editor.
-2. Add a new line for each animal in the following format: `Question?, Yes Answer, No Answer`
-   - Replace "Question?" with a yes or no question that distinguishes the animal from the others.
-   - Replace "Yes Answer" and "No Answer" with the name of the animal if the answer is "yes" or "no," respectively.
-3. Save the file and exit the text editor.
+Is it a mammal? (yes/no): yes
+Is it a Dog? (yes/no): no
+I couldn't guess your animal.
+What animal were you thinking of? Cat
+What question would distinguish a Cat from a Dog?
+(Please phrase as a yes/no question): Does it meow?
+What would be the answer for a Cat? (yes/no): yes
+Thank you! I've learned about the Cat.
 
-## Contributing
+Would you like to play again? (yes/no): no
+Thanks for playing!
+```
 
-Contributions to this project are welcome! To contribute, follow these steps:
-
-1. Fork this repository.
-2. Create a new branch with your changes: `git checkout -b my-feature-branch`
-3. Commit your changes: `git commit -am 'Add new feature'`
-4. Push your changes to your fork: `git push origin my-feature-branch`
-5. Submit a pull request
-
-## License
-
-This code is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+The game starts with basic knowledge and grows smarter as more people play!

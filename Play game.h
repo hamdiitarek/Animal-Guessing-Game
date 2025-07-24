@@ -3,52 +3,55 @@
 #include "Learn new information.h"
 
 void play_game(node_t *current_node) {
-    static int x = 0;
-    char answer[5];
-    printf("%s (Yes/No)\n", current_node->question);
+    char answer[10];
+    
+    // If this is a leaf node (animal guess)
+    if (current_node->yes == NULL && current_node->no == NULL) {
+        printf("Is it a %s? (yes/no): ", current_node->question);
+        scanf("%s", answer);
+        
+        if (strcmp(answer, "yes") == 0 || strcmp(answer, "Yes") == 0) {
+            printf("Great! I guessed your animal!\n");
+        } else {
+            printf("I couldn't guess your animal.\n");
+            learn_new_information(current_node);
+        }
+        return;
+    }
+    
+    // Ask the question
+    printf("%s (yes/no): ", current_node->question);
     scanf("%s", answer);
 
-    if (strcmp(answer, "Yes") == 0) {
-        // If the answer is "Yes", traverse down the "Yes" branch of the linked list
-        if (strcmp(current_node->yes_answer, "next question") != 0) {
-            // If the "Yes" branch is NULL, make a guess
-            printf("I think you were thinking of a %s.\n", current_node->yes_answer);
-            printf("Was I right? (Yes/No)\n");
+    if (strcmp(answer, "yes") == 0 || strcmp(answer, "Yes") == 0) {
+        if (current_node->yes != NULL) {
+            play_game(current_node->yes);
+        } else {
+            printf("Is it a %s? (yes/no): ", current_node->yes_answer);
             scanf("%s", answer);
-            if (strcmp(answer, "No") == 0) {
+            if (strcmp(answer, "yes") == 0 || strcmp(answer, "Yes") == 0) {
+                printf("Great! I guessed your animal!\n");
+            } else {
+                printf("I couldn't guess your animal.\n");
                 learn_new_information(current_node);
-            }else{
-                exit(0);
             }
-        } else {
-            // If the "Yes" branch is not NULL, continue the game
-                play_game(current_node->yes);
         }
-    } else if (strcmp(answer, "No") == 0) {
-        // If the answer is "No", traverse down the "No" branch of the linked list
-        if (strcmp(current_node->no_answer , "next section") == 10) {
-            current_node = current_node->no;
-            while(strcmp(current_node->no_answer , "next section") != 10){
-                current_node = current_node->no;
-                if (strcmp(current_node->no_answer, "end") == 10){
-                    break;
-                }
-            }
-            x++;
-            play_game(current_node);
+    } else if (strcmp(answer, "no") == 0 || strcmp(answer, "No") == 0) {
+        if (current_node->no != NULL) {
+            play_game(current_node->no);
         } else {
-            x++;
-            // If the "No" branch is not NULL, continue the game
-            if (x<4) {
-                play_game(current_node->no);
+            printf("Is it a %s? (yes/no): ", current_node->no_answer);
+            scanf("%s", answer);
+            if (strcmp(answer, "yes") == 0 || strcmp(answer, "Yes") == 0) {
+                printf("Great! I guessed your animal!\n");
+            } else {
+                printf("I couldn't guess your animal.\n");
+                learn_new_information(current_node);
             }
-            learn_new_information(current_node);
-            exit(0);
         }
     } else {
-        // If the answer is not "Yes" or "No", print an error message and exit
-        printf("Invalid answer.\n");
-        exit(1);
+        printf("Please answer with 'yes' or 'no'.\n");
+        play_game(current_node); // Ask the same question again
     }
 }
 

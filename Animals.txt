@@ -1,2 +1,3 @@
-Is it a mammal?,Elephant,Hummingbird
-Can it fly?,Dolphin,Bear
+Is it a mammal?
+Dog
+Fish
